@@ -1,0 +1,4 @@
+:schedule:
+  update_job:
+    every: 1h
+    class: UpdateJob
