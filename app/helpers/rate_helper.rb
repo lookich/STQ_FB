@@ -3,10 +3,10 @@ module RateHelper
   def help
     :available
   end
-  
+
   def get_json
-    # response = RestClient.get "https://api.exchangerate-api.com/v4/latest/USD"
-    response = File.read(Rails.root.join('public/json.json'))
+    response = RestClient.get "https://api.exchangerate-api.com/v4/latest/USD"
+    # response = File.read(Rails.root.join('public/json.json'))
     response_obj = JSON.parse(response)
     if response_obj.present?
       @rate = response_obj['rates']
