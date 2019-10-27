@@ -1,0 +1,16 @@
+version: '3'
+services:
+  redis:
+    image: redis
+  db:
+    image: postgres
+  web:
+    build: .
+    command:  bash -c "foreman start"
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
+      - "3035:3035"
+    depends_on:
+      - db
