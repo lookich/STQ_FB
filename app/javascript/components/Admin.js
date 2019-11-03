@@ -1,8 +1,9 @@
 import React from 'react'
 import { FormErrors } from './FormErrors'
 import { passCsrfToken } from '../utils/helpers'
-import { Form, Dropdown, Table, Alert, Col, Button } from 'react-bootstrap';
+import { Form, Dropdown, Table, Col, Button } from 'react-bootstrap';
 import axios from 'axios'
+import { GET_RATES, GET_ADMIN_RATES, POST_ADMIN_RATE } from '../constants/constants'
 
 class Admin extends React.Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class Admin extends React.Component {
   }
 
   get_admin_json() {
-    axios.get(`http://localhost:3000/admin.json`)
+    axios.get(GET_ADMIN_RATES)
     .then(response => {
       this.setState({admin_data: response.data.data});
     })
@@ -35,7 +36,7 @@ class Admin extends React.Component {
   componentDidMount() {
     passCsrfToken(document, axios)
 
-    axios.get('http://localhost:3000/rate/rates.json')
+    axios.get(GET_RATES)
     .then(response => {
       this.setState({rates: response.data})
     })
@@ -81,8 +82,7 @@ class Admin extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const { rate, datetime, rate_name } = this.state
-    // console.log(this.state.is_done)
-    axios.post(`http://localhost:3000/admin`, { rate, datetime, rate_name })
+    axios.post(POST_ADMIN_RATE, { rate, datetime, rate_name })
     .then((response) => {
       if(response.data) {
         this.setState({is_done: true});
@@ -108,54 +108,57 @@ class Admin extends React.Component {
       <React.Fragment>
         <div>
           <Form onSubmit={this.handleSubmit}>
-            <Form.Row className="justify-content-md-center">
-              <Alert variant="success">
-                <Alert.Heading>Admin panel</Alert.Heading>
-              </Alert>
-            </Form.Row>
-            <Form.Row className="justify-content-md-center">
-              <Col md="2">
-                <Form.Group>
-                  <Form.Label>Сurrency:</Form.Label>
-                  <Dropdown>
-                    <Form.Control as="select" name="rate_name" value={this.state.rate_name} onChange={this.handleChange}>
-                      {cname.map((n) => {
-                        return (
-                          <option key={n}>{n}</option>
-                        )
-                      })}
-                    </Form.Control>
-                  </Dropdown>
-                </Form.Group>
-                <FormErrors formErrors={this.state.formErrors} />
-
-              </Col>
-              <Col md="2">
-                <Form.Group>
-                  <Form.Label>New Rate</Form.Label>
-                  <Form.Control type="text" name="rate" value={this.state.rate} onChange={this.handleChange} placeholder="Enter new rate..." />
-                </Form.Group>
-              </Col>
-              <Col md="4">
-                <Form.Group>
-                  <Form.Label>Date and time format: (2013-02-02 01:00:00)</Form.Label>
-                  <Form.Control type="text" name="datetime" value={this.state.datetime} onChange={this.handleChange} placeholder="Enter date and time..." />
-                </Form.Group>
-              </Col>
-            </Form.Row>
-            <Form.Row className="justify-content-md-center">
-              <Button variant="dark" type="submit"  disabled={!this.state.formValid}>
-                Submit
-              </Button>
-            </Form.Row>
+            <h1 align="center">Admin panel</h1>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>
+                    Select rate
+                  </th>
+                  <th>
+                    New Rate
+                  </th>
+                  <th>
+                    Date and time format: (2013-02-02 01:00:00)
+                  </th>
+                  <th>
+                    Confirm changes
+                  </th>
+                </tr>
+              </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <select as="select" name="rate_name" value={this.state.rate_name} onChange={this.handleChange}>
+                          {cname.map((n) => {
+                            return (
+                              <option key={n}>{n}</option>
+                            )
+                          })}
+                      </select>
+                      <FormErrors formErrors={this.state.formErrors} />
+                    </td>
+                    <td>
+                      <input type="text" name="rate" value={this.state.rate} onChange={this.handleChange} placeholder="Enter new rate..." />
+                    </td>
+                    <td>
+                      <input type="text" name="datetime" value={this.state.datetime} onChange={this.handleChange} placeholder="Enter date and time..." />
+                    </td>
+                    <td align="center">
+                      <Button variant="dark" type="submit"  disabled={!this.state.formValid}>
+                        Submit
+                      </Button>
+                    </td>
+                  </tr>
+                </tbody>
+            </Table>
           </Form>
           <div>
             <Form>
-              <Table striped bordered hover>
+              <Table>
                 <thead>
                   <tr>
-                    <th>Base rate: USD</th>
-                    <th>Date and time last chages</th>
+                    <th colSpan="2">Last changes</th>
                   </tr>
                 </thead>
                 <tbody>

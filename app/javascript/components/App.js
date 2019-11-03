@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import ExchangeRate from './ExchangeRate';
 import Admin from './Admin';
 import 'bootstrap/dist/css/bootstrap.min.css';

@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { Form, Table } from 'react-bootstrap';
+import { GET_RATES } from '../constants/constants'
 
 class ExchangeRate extends React.PureComponent {
   constructor(props) {
@@ -11,7 +12,7 @@ class ExchangeRate extends React.PureComponent {
   }
 
   get_rates_json () {
-    axios.get('http://localhost:3000/rate/rates.json')
+    axios.get(GET_RATES)
     .then(response => {
       this.setState({rates: response.data})
     })
@@ -40,7 +41,9 @@ class ExchangeRate extends React.PureComponent {
               <Table striped bordered hover>
                 <thead>
                   <tr>
-                    <th>Base rate: USD</th>
+                    <th>Base rate:
+                      USD
+                    </th>
                     <th>Date and time last chages</th>
                   </tr>
                 </thead>

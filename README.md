@@ -1,5 +1,7 @@
 # README
 
+ Exchange rate API with the replacement of a certain rate for a some time.
+
 * Used technologies:
 
   Ruby version
